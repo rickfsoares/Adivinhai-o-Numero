@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Acerte o Numero</string>
+    <string name="adivinhai_o_numero">Porsooth, adivinhai o número, ó nobre!</string>
+    <string name="adivinhar">adivinhar</string>
+    <string name="_1">1</string>
+    <string name="_100">100</string>
+    <string name="adivinhai_aqui">Adivinhai aqui</string>
+    <string name="_adivinhar">Adivinhar</string>
+    <string name="executando">Executando</string>
+    <string name="statusEncerrado">Encerrado</string>
+</resources>
