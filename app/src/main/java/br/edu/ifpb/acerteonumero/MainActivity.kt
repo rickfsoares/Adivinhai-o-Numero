@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private val maiorValor:String = "100"
 
     private val venceuMsg: String = "Venceste"
-    private val perdeuMsg: String = "Oh, desafortunado! A sorte não sorriu a vós desta vez."
+    private val perdeuMsg: String = "Perdeste"
     private val quaseMsg: String = "Quase, mas não o suficiente para desvendar o enigma!"
 
     private val duracaoDaMsg: Int = Toast.LENGTH_LONG
@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             val data: Intent? = it.data
             val nomeInserido = data?.getStringExtra("nomeDoUsuario")
 
-            // Faça o que você quiser com o nome inserido, por exemplo, exibi-lo em um TextView
             if (nomeInserido != null) {
                 val tvNome = findViewById<TextView>(R.id.tvNomeDoUsuario)
                 tvNome.text = nomeInserido
@@ -78,8 +77,6 @@ class MainActivity : AppCompatActivity() {
         val numeroDoUsuario:String = this.palpiteDoUsuario.text.toString()
         var novoValor: Int = 0
 
-
-
         val condicaoParaPerder: Boolean = (numeroDoUsuario == this.tvMenorValor.text.toString()) ||
                 (numeroDoUsuario == this.tvMaiorValor.text.toString()) ||
                 (this.tvMenorValor.text.toString() == this.tvMaiorValor.text.toString()) ||
@@ -89,6 +86,8 @@ class MainActivity : AppCompatActivity() {
         if (condicaoParaPerder) {
             Toast.makeText(this, perdeuMsg, duracaoDaMsg).show()
             this.statusDoJogo = false
+            val intent = Intent(this, Perdeu::class.java)
+            startActivity(intent)
         }
         else if ( numeroDoUsuario.toInt() < numeroSorteado) {
             novoValor = numeroDoUsuario.toInt() + 1
@@ -99,8 +98,6 @@ class MainActivity : AppCompatActivity() {
             novoValor = numeroDoUsuario.toInt() - 1
             this.tvMaiorValor.text = SpannableStringBuilder(novoValor.toString())
             Toast.makeText(this, quaseMsg, duracaoDaMsg).show()
-            val intent = Intent(this, Venceu::class.java)
-            venceuResult.launch(intent)
         }
         else {
             Toast.makeText(this, venceuMsg, duracaoDaMsg).show()
