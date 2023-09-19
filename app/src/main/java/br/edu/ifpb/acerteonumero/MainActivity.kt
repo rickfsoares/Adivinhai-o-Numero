@@ -1,5 +1,7 @@
 package br.edu.ifpb.acerteonumero
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -9,6 +11,8 @@ import android.widget.TextView
 import android.widget.Toast
 import br.edu.ifpb.acerteonumero.Jogo
 import com.google.android.material.textfield.TextInputEditText
+import androidx.activity.result.contract.ActivityResultContracts
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnAdivinhacaoDoUsuario: Button
@@ -23,13 +27,26 @@ class MainActivity : AppCompatActivity() {
     private val menorValor:String = "1"
     private val maiorValor:String = "100"
 
-    private val venceuMsg: String = "Em verdade e honra, o triunfo é vosso!"
+    private val venceuMsg: String = "Venceste"
     private val perdeuMsg: String = "Oh, desafortunado! A sorte não sorriu a vós desta vez."
     private val quaseMsg: String = "Quase, mas não o suficiente para desvendar o enigma!"
 
     private val duracaoDaMsg: Int = Toast.LENGTH_LONG
 
     private var statusDoJogo: Boolean = true
+
+    private val venceuResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = it.data
+            val nomeInserido = data?.getStringExtra("nomeDoUsuario")
+
+            // Faça o que você quiser com o nome inserido, por exemplo, exibi-lo em um TextView
+            if (nomeInserido != null) {
+                val tvNome = findViewById<TextView>(R.id.tvNomeDoUsuario)
+                tvNome.text = nomeInserido
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +70,15 @@ class MainActivity : AppCompatActivity() {
         }
         this.btnStatus.setOnClickListener{ changeStatus(it)}
 
+
+
     }
 
     fun checkUserAnswer(view: View) {
         val numeroDoUsuario:String = this.palpiteDoUsuario.text.toString()
         var novoValor: Int = 0
+
+
 
         val condicaoParaPerder: Boolean = (numeroDoUsuario == this.tvMenorValor.text.toString()) ||
                 (numeroDoUsuario == this.tvMaiorValor.text.toString()) ||
@@ -78,10 +99,14 @@ class MainActivity : AppCompatActivity() {
             novoValor = numeroDoUsuario.toInt() - 1
             this.tvMaiorValor.text = SpannableStringBuilder(novoValor.toString())
             Toast.makeText(this, quaseMsg, duracaoDaMsg).show()
+            val intent = Intent(this, Venceu::class.java)
+            venceuResult.launch(intent)
         }
         else {
             Toast.makeText(this, venceuMsg, duracaoDaMsg).show()
             this.statusDoJogo = false
+            val intent = Intent(this, Venceu::class.java)
+            venceuResult.launch(intent)
         }
     }
 
